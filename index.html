@@ -1,46 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Calculator</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript">
-		function calculate() {
-			var display = document.getElementById("display");
-			var expression = display.innerHTML;
-			var result = eval(expression);
-			display.innerHTML = result;
-		}
+  <head>
+    <meta charset="UTF-8">
+    <title>My Calculator</title>
+    <link rel="stylesheet" href="calculator.css">
+  </head>
+  <body>
+    <div class="calculator">
+      <div class="calculator__display"></div>
+      <button class="calculator__button calculator__button--clear" data-action="clear">AC</button>
+      <button class="calculator__button calculator__button--operator" data-action="backspace">←</button>
+      <button class="calculator__button calculator__button--operator" data-action="percent">%</button>
+      <button class="calculator__button" data-action="7">7</button>
+      <button class="calculator__button" data-action="8">8</button>
+      <button class="calculator__button" data-action="9">9</button>
+      <button class="calculator__button calculator__button--operator" data-action="divide">÷</button>
+      <button class="calculator__button" data-action="4">4</button>
+      <button class="calculator__button" data-action="5">5</button>
+      <button class="calculator__button" data-action="6">6</button>
+      <button class="calculator__button calculator__button--operator" data-action="multiply">×</button>
+      <button class="calculator__button" data-action="1">1</button>
+      <button class="calculator__button" data-action="2">2</button>
+      <button class="calculator__button" data-action="3">3</button>
+      <button class="calculator__button calculator__button--operator" data-action="add">+</button>
+      <button class="calculator__button" data-action="0">0</button>
+      <button class="calculator__button" data-action="decimal">.</button>
+      <button class="calculator__button calculator__button--equal" data-action="calculate">=</button>
+      <button class="calculator__button calculator__button--operator" data-action="subtract">-</button>
+    </div>
 
-		function clearDisplay() {
-			document.getElementById("display").innerHTML = "";
-		}
-
-		function addToDisplay(value) {
-			document.getElementById("display").innerHTML += value;
-		}
-	</script>
-</head>
-<body>
-	<div id="calculator">
-		<div id="display"></div>
-		<button class="button operator" onclick="addToDisplay('+')">+</button>
-		<button class="button operator" onclick="addToDisplay('-')">-</button>
-		<button class="button operator" onclick="addToDisplay('*')">&times;</button>
-		<button class="button operator" onclick="addToDisplay('/')">&divide;</button>
-		<button class="button" onclick="addToDisplay('7')">7</button>
-		<button class="button" onclick="addToDisplay('8')">8</button>
-		<button class="button" onclick="addToDisplay('9')">9</button>
-		<button class="button" onclick="addToDisplay('4')">4</button>
-		<button class="button" onclick="addToDisplay('5')">5</button>
-		<button class="button" onclick="addToDisplay('6')">6</button>
-		<button class="button" onclick="addToDisplay('1')">1</button>
-		<button class="button" onclick="addToDisplay('2')">2</button>
-		<button class="button" onclick="addToDisplay('3')">3</button>
-		<button class="button" onclick="addToDisplay('0')">0</button>
-		<button class="button" onclick="addToDisplay('.')">.</button>
-		<button class="button" id="clear" onclick="clearDisplay()">C</button>
-		<button class="button" id="equals" onclick="calculate()">=</button>
-	</div>
-</body>
+    <script src="calculator.js"></script>
+  </body>
 </html>
