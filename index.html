@@ -1,88 +1,90 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>3D Spel med Three.js</title>
+    <title>3D Cube Game</title>
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-      canvas {
-        width: 100%;
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
-    <script>
-      let camera, scene, renderer, cube, controls;
-
-      function init() {
-        // Kamera
-        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000 );
-        camera.position.z = 5;
-
-        // Scen
-        scene = new THREE.Scene();
-
-        // Kub
-        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        const material = new THREE.MeshBasicMaterial( { color: 0x808080 } );
-        cube = new THREE.Mesh( geometry, material );
-        scene.add( cube );
-
-        // Renderer
-        renderer = new THREE.WebGLRenderer( { antialias: true } );
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( renderer.domElement );
-
-        // Kontroller
-        controls = new THREE.OrbitControls( camera, renderer.domElement );
-        controls.enableZoom = false;
-
-        // Eventlyssnare
-        window.addEventListener( 'resize', onWindowResize );
-        document.addEventListener( 'keydown', onKeyDown );
-      }
-
-      function animate() {
-        requestAnimationFrame( animate );
-        renderer.render( scene, camera );
-      }
-
-      function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-      }
-
-      function onKeyDown( event ) {
-        switch ( event.keyCode ) {
-          case 65: // A
-            tweenCubePosition(-2);
-            break;
-          case 68: // D
-            tweenCubePosition(2);
-            break;
+        body {
+            margin: 0;
+            overflow: hidden;
         }
-      }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@18.6.4/dist/tween.esm.js"></script>
+    <script>
+        let camera, scene, renderer, cube, cubeTween;
+        let cubePosition = { x: 0, y: 0, z: 0 };
+        let cubeSpeed = 2;
 
-      function tweenCubePosition(destinationX) {
-        const currentPositionX = cube.position.x;
-        const distance = Math.abs(destinationX - currentPositionX);
-        const duration = distance * 100; // För att få en konstant hastighet
+        init();
+        animate();
 
-        new TWEEN.Tween( cube.position )
-          .to( { x: destinationX }, duration )
-          .start();
-      }
+        function init() {
+            camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+            camera.position.z = 5;
 
-      init();
-      animate();
+            scene = new THREE.Scene();
+
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial( { color: 0x808080 } );
+            cube = new THREE.Mesh( geometry, material );
+            scene.add( cube );
+
+            renderer = new THREE.WebGLRenderer( { antialias: true } );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            window.addEventListener( 'keydown', onKeyDown, false );
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            if (cubeTween) {
+                cubePosition.x = cube.position.x;
+                cubePosition.y = cube.position.y;
+                cubePosition.z = cube.position.z;
+            }
+
+            renderer.render( scene, camera );
+        }
+
+        function onKeyDown( event ) {
+            switch ( event.code ) {
+                case 'KeyA':
+                    moveCubeLeft();
+                    break;
+                case 'KeyD':
+                    moveCubeRight();
+                    break;
+            }
+        }
+
+        function moveCubeLeft() {
+            if (!cubeTween || !cubeTween.isPlaying()) {
+                cubeTween = new TWEEN.Tween(cubePosition)
+                    .to({ x: -2.5 }, cubeSpeed * 1000)
+                    .easing(TWEEN.Easing.Quadratic.Out)
+                    .onUpdate(() => {
+                        cube.position.x = cubePosition.x;
+                    })
+                    .start();
+            }
+        }
+
+        function moveCubeRight() {
+            if (!cubeTween || !cubeTween.isPlaying()) {
+                cubeTween = new TWEEN.Tween(cubePosition)
+                    .to({ x: 2.5 }, cubeSpeed * 1000)
+                    .easing(TWEEN.Easing.Quadratic.Out)
+                    .onUpdate(() => {
+                        cube.position.x = cubePosition.x;
+                    })
+                    .start();
+            }
+        }
     </script>
-  </body>
+</body>
 </html>
