@@ -38,10 +38,25 @@
             position: absolute;
             width: 40px;
             height: 40px;
-            background-image: url('fruit.PNG');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+        }
+
+        .fruit-orange {
+            background-image: url('fruit-orange.PNG');
+        }
+
+        .fruit-apple {
+            background-image: url('fruit-apple.PNG');
+        }
+
+        .fruit-banana {
+            background-image: url('fruit-banana.PNG');
+        }
+
+        .fruit-pear {
+            background-image: url('fruit-pear.PNG');
         }
 
         #score {
@@ -78,7 +93,7 @@
         function dropFruit() {
             var fruit = document.createElement("div");
             fruit.className = "fruit";
-            fruit.style.backgroundColor = getRandomColor();
+            fruit.classList.add(getRandomFruitClass());
             fruit.style.left = getRandomPosition() + "px";
             gameContainer.appendChild(fruit);
 
@@ -131,10 +146,10 @@
             );
         }
 
-        // Generate a random color for the fruit
-        function getRandomColor() {
-            var colors = ["red", "green", "blue", "yellow"];
-            return colors[Math.floor(Math.random() * colors.length)];
+        // Get a random fruit class
+        function getRandomFruitClass() {
+            var fruitClasses = ["fruit-orange", "fruit-apple", "fruit-banana", "fruit-pear"];
+            return fruitClasses[Math.floor(Math.random() * fruitClasses.length)];
         }
 
         // Generate a random position for the fruit
