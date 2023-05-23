@@ -71,21 +71,21 @@
     <div id="game-container">
         <div id="basket"></div>
     </div>
-    <div id="score">Score: 0 | Fruits Collected: 0</div>
+    <div id="score">Score: 0</div>
     <script>
         var score = 0;
-        var fruitsCollected = 0;
         var gameContainer = document.getElementById("game-container");
         var basket = document.getElementById("basket");
         var scoreElement = document.getElementById("score");
         var basketPosition = 0;
+        var basketSpeed = 5;
 
         // Move the basket when the A or D key is pressed
         document.addEventListener("keydown", function (event) {
             if (event.key === "a" || event.key === "A") {
-                moveBasket(-17); // Move left
+                moveBasket(-basketSpeed); // Move left
             } else if (event.key === "d" || event.key === "D") {
-                moveBasket(17); // Move right
+                moveBasket(basketSpeed); // Move right
             }
         });
 
@@ -107,7 +107,6 @@
                     clearInterval(animationInterval);
                     gameContainer.removeChild(fruit);
                     score++;
-                    fruitsCollected++;
                     updateScore();
                 }
 
@@ -119,20 +118,34 @@
             }, 10);
         }
 
-        // Move the basket by changing its transform property
+        // Move the basket smoothly using requestAnimationFrame
         function moveBasket(distance) {
-            basketPosition += distance;
             var containerWidth = gameContainer.offsetWidth;
             var basketWidth = basket.offsetWidth;
             var maxLeft = (containerWidth - basketWidth) / 2;
+            var newBasketPosition = basketPosition + distance;
 
-            if (basketPosition < -maxLeft) {
-                basketPosition = -maxLeft;
-            } else if (basketPosition > maxLeft) {
-                basketPosition = maxLeft;
+            if (newBasketPosition < -maxLeft) {
+                newBasketPosition = -maxLeft;
+            } else if (newBasketPosition > maxLeft) {
+                newBasketPosition = maxLeft;
             }
 
-            basket.style.transform = "translateX(" + basketPosition + "px)";
+            function animateBasket() {
+                if (basketPosition !== newBasketPosition) {
+                    var step = distance / 10;
+                    basketPosition += step;
+
+                    if ((distance < 0 && basketPosition >= newBasketPosition) || (distance > 0 && basketPosition <= newBasketPosition)) {
+                        basketPosition = newBasketPosition;
+                    }
+
+                    basket.style.transform = "translateX(" + basketPosition + "px)";
+                    requestAnimationFrame(animateBasket);
+                }
+            }
+
+            animateBasket();
         }
 
         // Check if the fruit is caught by the basket
@@ -159,7 +172,7 @@
 
         // Update the score on the screen
         function updateScore() {
-            scoreElement.innerHTML = "Score: " + score + " | Fruits Collected: " + fruitsCollected;
+            scoreElement.innerHTML = "Score: " + score;
         }
 
         // Start the game
