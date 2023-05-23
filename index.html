@@ -92,11 +92,12 @@
             basketPosition += distance;
             var containerWidth = gameContainer.offsetWidth;
             var basketWidth = basket.offsetWidth;
+            var maxLeft = (containerWidth - basketWidth) / 2;
 
-            if (basketPosition < 0) {
-                basketPosition = 0;
-            } else if (basketPosition > containerWidth - basketWidth) {
-                basketPosition = containerWidth - basketWidth;
+            if (basketPosition < -maxLeft) {
+                basketPosition = -maxLeft;
+            } else if (basketPosition > maxLeft) {
+                basketPosition = maxLeft;
             }
 
             basket.style.transform = "translateX(" + basketPosition + "px)";
