@@ -38,9 +38,10 @@
         var gameContainer = document.getElementById("game-container");
         var basket = document.getElementById("basket");
 
-        // Move the basket when the mouse moves
-        gameContainer.addEventListener("mousemove", function (event) {
-            var x = event.clientX - gameContainer.offsetLeft;
+        // Move the basket when the touch moves
+        gameContainer.addEventListener("touchmove", function (event) {
+            var touch = event.touches[0];
+            var x = touch.clientX - gameContainer.offsetLeft;
             basket.style.left = x - basket.offsetWidth / 2 + "px";
         });
 
