@@ -46,6 +46,7 @@
         var gameContainer = document.getElementById("game-container");
         var basket = document.getElementById("basket");
         var scoreElement = document.getElementById("score");
+        var basketPosition = 0;
 
         // Move the basket when the A or D key is pressed
         document.addEventListener("keydown", function (event) {
@@ -86,20 +87,19 @@
             }, 10);
         }
 
-        // Move the basket by changing its left position
+        // Move the basket by changing its transform property
         function moveBasket(distance) {
-            var currentLeft = parseInt(basket.style.left, 10);
-            var newLeft = currentLeft + distance;
+            basketPosition += distance;
             var containerWidth = gameContainer.offsetWidth;
             var basketWidth = basket.offsetWidth;
 
-            if (newLeft < 0) {
-                newLeft = 0;
-            } else if (newLeft > containerWidth - basketWidth) {
-                newLeft = containerWidth - basketWidth;
+            if (basketPosition < 0) {
+                basketPosition = 0;
+            } else if (basketPosition > containerWidth - basketWidth) {
+                basketPosition = containerWidth - basketWidth;
             }
 
-            basket.style.left = newLeft + "px";
+            basket.style.transform = "translateX(" + basketPosition + "px)";
         }
 
         // Check if the fruit is caught by the basket
