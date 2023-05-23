@@ -1,55 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Welcome to My Retro Website</title>
-  <style>
-    body {
-      background-color: #ffffcc;
-      font-family: Arial, sans-serif;
-    }
-    h1 {
-      color: #990000;
-      text-align: center;
-    }
-    p {
-      color: #000066;
-    }
-    .container {
-      width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border: 1px solid #cccccc;
-    }
-    .download-button {
-      background-color: #990000;
-      color: #ffffff;
-      padding: 10px 20px;
-      border: none;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  </style>
+    <title>Fruit Catcher</title>
+    <style>
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+
+        #basket {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: orange;
+        }
+
+        .fruit {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to My Retro Website</h1>
-    <p>This website is a blast from the past, designed to bring back the nostalgia of the early days of the internet!</p>
-    <hr>
-    <h2>About Me</h2>
-    <p>Hello, my name is John Doe. I've been creating websites since the early 2000s and I'm passionate about the web!</p>
-    <h2>My Interests</h2>
-    <ul>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JavaScript</li>
-      <li>Flash</li>
-    </ul>
-    <h2>Contact Me</h2>
-    <p>Feel free to reach out to me via email at <a href="mailto:john@example.com">john@example.com</a>.</p>
-    <hr>
-    <a href="https://file.io/14QLMknZO6n4" class="download-button" download>Download</a>
-    <p>&copy; 2003 My Retro Website. All rights reserved.</p>
-  </div>
+    <h1>Fruit Catcher</h1>
+    <div id="game-container">
+        <div id="basket"></div>
+    </div>
+    <script>
+        var score = 0;
+        var gameContainer = document.getElementById("game-container");
+        var basket = document.getElementById("basket");
+
+        // Move the basket when the mouse moves
+        gameContainer.addEventListener("mousemove", function (event) {
+            var x = event.clientX - gameContainer.offsetLeft;
+            basket.style.left = x - basket.offsetWidth / 2 + "px";
+        });
+
+        // Generate a random fruit and drop it from the top
+        function dropFruit() {
+            var fruit = document.createElement("div");
+            fruit.className = "fruit";
+            fruit.style.backgroundColor = getRandomColor();
+            fruit.style.left = getRandomPosition() + "px";
+            gameContainer.appendChild(fruit);
+
+            // Animate the fruit falling down
+            var animationInterval = setInterval(function () {
+                var top = fruit.offsetTop;
+                fruit.style.top = top + 1 + "px";
+
+                // Check if the fruit is caught by the basket
+                if (isCaught(fruit)) {
+                    clearInterval(animationInterval);
+                    gameContainer.removeChild(fruit);
+                    score++;
+                    updateScore();
+                }
+
+                // Check if the fruit reaches the bottom
+                if (top > gameContainer.offsetHeight) {
+                    clearInterval(animationInterval);
+                    gameContainer.removeChild(fruit);
+                }
+            }, 10);
+        }
+
+        // Check if the fruit is caught by the basket
+        function isCaught(fruit) {
+            var fruitRect = fruit.getBoundingClientRect();
+            var basketRect = basket.getBoundingClientRect();
+            return (
+                fruitRect.bottom >= basketRect.top &&
+                fruitRect.right >= basketRect.left &&
+                fruitRect.left <= basketRect.right
+            );
+        }
+
+        // Generate a random color for the fruit
+        function getRandomColor() {
+            var colors = ["red", "green", "blue", "yellow"];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Generate a random position for the fruit
+        function getRandomPosition() {
+            return Math.floor(Math.random() * (gameContainer.offsetWidth - 30));
+        }
+
+        // Update the score on the screen
+        function updateScore() {
+            var scoreElement = document.getElementById("score");
+            scoreElement.innerHTML = "Score: " + score;
+        }
+
+        // Start the game
+        setInterval(dropFruit, 2000);
+    </script>
 </body>
 </html>
